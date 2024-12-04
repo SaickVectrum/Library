@@ -2,21 +2,40 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Book;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lend extends Model
 {
 	use HasFactory, SoftDeletes;
 
 	protected $fillable = [
-		'customer_user_id',
-		'customer_user_id',
-		'owner_user_id',
+		'customer_user_id', //Prestador
+		'owner_user_id', //Bibliotecario
 		'book_id',
 		'date_out',
 		'date_in',
 		'status'
 	];
+
+
+	public function book(): BelongsTo
+	{
+		return $this->belongsTo(Book::class, 'book_id', 'id');
+	}
+
+
+	public function customer(): BelongsTo
+	{
+		return $this->belongsTo(User::class, 'customer_user_id', 'id');
+	}
+
+	public function owner(): BelongsTo
+	{
+		return $this->belongsTo(User::class, 'owner_user_id', 'id');
+	}
 }
