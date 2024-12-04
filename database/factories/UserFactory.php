@@ -2,39 +2,38 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition()
-    {
-        return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
-        ];
-    }
+	//Esto se coloca para que el factory se identifique mas facilmente con el modelo
+	protected $model = User::class;
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     *
-     * @return static
-     */
-    public function unverified()
-    {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
-    }
+	public function definition()
+	{
+		return [
+			//Este lo que hace es hacer referencia a una variable que trae a traves de Factory
+			'number_id' => $this->faker->randomNumber(8, true),
+			'name' => $this->faker->name(),
+			//Este es un alias
+			'last_name' => fake()->name(),
+			'email' => fake()->unique()->safeEmail(),
+			'password' => bcrypt(123456789),
+			'remember_token' => Str::random(10),
+		];
+	}
+
+	/**
+	 * Indicate that the model's email address should be unverified.
+	 *
+	 * @return static
+	 */
+	// public function unverified()
+	// {
+	//     return $this->state(fn (array $attributes) => [
+	//         'email_verified_at' => null,
+	//     ]);
+	// }
 }

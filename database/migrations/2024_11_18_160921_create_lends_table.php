@@ -15,7 +15,7 @@ return new class extends Migration
 			$table->bigInteger('book_id')->unsigned();
 			$table->date('date_out');
 			$table->date('date_in')->nullable();
-			$table->enum('status', ['PRESTADO', 'REVISION', 'EN SALA'])->default(['EN SALA']);
+			$table->enum('status', ['PRESTADO', 'REVISION', 'EN SALA'])->default('EN SALA');
 			$table->timestamps();
 			$table->softDeletes();
 		});

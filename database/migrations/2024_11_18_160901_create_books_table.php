@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
 			$table->bigInteger('category_id')->unsigned();
 			$table->bigInteger('author_id')->unsigned();
-			$table->string('name');
+			$table->string('title');
 			$table->integer('stock');
 			$table->text('description')->nullable();
             $table->timestamps();
