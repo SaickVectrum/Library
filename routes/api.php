@@ -3,9 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Routing\RouteGroup;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthorController;
 use PHPUnit\TextUI\XmlConfiguration\Group;
+use App\Http\Controllers\AuthUserAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,13 +24,34 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 	return $request->user();
 });
 
-//group como su nombre lo indica es para agrupar rutas que comparten el mismo prefijo
-Route::group(['prefix' => 'users', 'controller' => UserController::class], function () {
-	//El primer parametro es la ruta, y el segundo seria la función que le corresponde en el controlador (UserController)
-	Route::get('/', 'index');
-	Route::get('/{user}', 'show');
-	Route::post('/', 'store');
-	//El parametro que pasemos se debe llamar igual a como está en el controlador
-	Route::put('/{user}', 'update');
-	Route::delete('/{user}', 'destroy');
+
+
+Route::post('/login', [AuthUserAPIController::class, 'login']);
+Route::post('/register', [UserController::class, 'store']);
+
+//Rutas protegidas
+Route::group(['middleware' => ['auth:sanctum']], function () {
+
+	Route::post('/logout', [AuthUserAPIController::class, 'logout']);
+	Route::get('/profile', [AuthUserAPIController::class, 'profile']);
+
+
+	//group como su nombre lo indica es para agrupar rutas que comparten el mismo prefijo
+	Route::group(['prefix' => 'users', 'controller' => UserController::class], function () {
+		//El primer parametro es la ruta, y el segundo seria la función que le corresponde en el controlador (UserController)
+		Route::get('/', 'index');
+		Route::get('/{user}', 'show');
+		Route::post('/', 'store');
+		//El parametro que pasemos se debe llamar igual a como está en el controlador
+		Route::put('/{user}', 'update');
+		Route::delete('/{user}', 'destroy');
+	});
+
+	Route::group(['prefix' => 'authors', 'controller' => AuthorController::class], function () {
+		Route::get('/', 'index');
+		Route::get('/{author}', 'show');
+		Route::post('/', 'store');
+		Route::put('/{author}', 'update');
+		Route::delete('/{author}', 'destroy');
+	});
 });

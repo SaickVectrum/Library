@@ -20,7 +20,7 @@ class UserFactory extends Factory
 			//Este es un alias
 			'last_name' => fake()->name(),
 			'email' => fake()->unique()->safeEmail(),
-			'password' => bcrypt(123456789),
+			'password' => '123456789',
 			'remember_token' => Str::random(10),
 		];
 	}
